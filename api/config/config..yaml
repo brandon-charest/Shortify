@@ -1,0 +1,13 @@
+Port: ':3000'
+BaseURL: 'http://localhost:3000'
+EnableDebug: true
+EnableColorLogs: true
+DataDir: ./data
+Redis:
+  Host: localhost:6379  
+  Password: ''
+  Db: 0                 
+  MaxRetries: 3         
+  ReadTimeout: 3s
+  WriteTimeout: 3s 
+  SessionDB: 1 
