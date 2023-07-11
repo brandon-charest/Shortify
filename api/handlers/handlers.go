@@ -20,7 +20,7 @@ func New() (*Handler, error) {
 }
 
 func (h *Handler) setHandlers() error {
-	h.engine.POST("/", h.resolveRoot)
+	h.engine.GET("/", h.resolveRoot)
 	h.engine.POST("/shorten", h.resolveShorten)
 
 	return nil
