@@ -6,15 +6,23 @@ import (
 
 	"github.com/go-redis/redis"
 	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 )
 
 type Client struct {
 	client *redis.Client
 }
 
-// func New() (*Client, error) {
+func New() (*Client, error) {
+	c, err := newClient(viper.GetString("DB_ADDRESS"),
+		viper.GetString("DB_PASS"),
+		viper.GetInt("DB_ID"),
+		viper.GetInt("DB_MAX_RETY"),
+		viper.GetString("DB_READ_TIMEOUT"),
+		viper.GetString("DB_WRITE_TIMEOUT"))
 
-// }
+	return c, err
+}
 
 func newClient(hostaddr, password string, db int, maxRetries int, readTimeout string, writeTimeout string) (*Client, error) {
 	var rt, wt time.Duration

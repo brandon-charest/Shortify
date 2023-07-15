@@ -4,7 +4,9 @@ import (
 	"os"
 
 	"github.com/brandon-charest/Shortify.git/api/handlers"
+	"github.com/brandon-charest/Shortify.git/api/stores/redis"
 	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 )
 
 func main() {
@@ -15,12 +17,23 @@ func main() {
 	})
 	logrus.SetOutput(os.Stdout)
 
+	viper.SetConfigFile(".env")
+	err := viper.ReadInConfig()
+	if err != nil {
+		logrus.Fatalf("Error trying to load config: %v", err)
+	}
+
 	initApp()
 
 	logrus.Println("Shutting down...")
 }
 
 func initApp() error {
+
+	_, err := redis.New()
+	if err != nil {
+		logrus.Fatalf("Could not setup redis: %v", err)
+	}
 	h, err := handlers.New()
 	if err != nil {
 		logrus.Fatalf("Could not setup app: %v", err)

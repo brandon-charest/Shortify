@@ -5,6 +5,7 @@ import (
 
 	"github.com/brandon-charest/Shortify.git/api/stores/redis"
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 )
 
 type Handler struct {
@@ -28,5 +29,5 @@ func (h *Handler) setHandlers() error {
 }
 
 func (h *Handler) Listen() error {
-	return h.engine.Run(":3000")
+	return h.engine.Run(viper.GetString("APP_PORT"))
 }
