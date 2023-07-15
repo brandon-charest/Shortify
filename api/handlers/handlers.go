@@ -3,8 +3,8 @@ package handlers
 import (
 	"errors"
 
-	"github.com/brandon-charest/Shortify.git/api/stores/redis"
 	"github.com/gin-gonic/gin"
+	"github.com/go-redis/redis"
 	"github.com/spf13/viper"
 )
 

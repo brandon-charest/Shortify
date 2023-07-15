@@ -1,3 +1,7 @@
+package model
+
+import "time"
+
 type Storage interface {
 	GetEntryByID(string) (*Entry, error)
 	GetVisitors(string) ([]Visitor, error)
