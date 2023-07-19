@@ -30,12 +30,12 @@ func newClient(hostaddr, password string, db int, maxRetries int, readTimeout st
 
 	if rt, err = time.ParseDuration(readTimeout); err != nil {
 		logrus.Error(err)
-		return nil, errors.New("Error parsing read timeout")
+		return nil, errors.New("error parsing read timeout")
 	}
 
 	if wt, err = time.ParseDuration(writeTimeout); err != nil {
 		logrus.Error(err)
-		return nil, errors.New("Error parsing write timeout")
+		return nil, errors.New("error parsing write timeout")
 	}
 
 	c := redis.NewClient(&redis.Options{
@@ -46,11 +46,16 @@ func newClient(hostaddr, password string, db int, maxRetries int, readTimeout st
 		ReadTimeout:  rt,
 		WriteTimeout: wt,
 	})
-
+	logrus.Info("redis client created")
 	if _, err = c.Ping().Result(); err != nil {
 		logrus.Error(err)
-		return nil, errors.New("Error connecting to redis")
+		return nil, errors.New("error connecting to redis")
 	}
 	ret := &Client{client: c}
 	return ret, nil
+}
+
+func (r *Client) Close() error {
+	err := r.client.Close()
+	return err
 }

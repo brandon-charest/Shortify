@@ -3,8 +3,8 @@ package handlers
 import (
 	"errors"
 
+	"github.com/brandon-charest/Shortify.git/stores/redis"
 	"github.com/gin-gonic/gin"
-	"github.com/go-redis/redis"
 	"github.com/spf13/viper"
 )
 
@@ -13,8 +13,8 @@ type Handler struct {
 	store  redis.Client
 }
 
-func New() (*Handler, error) {
-	h := &Handler{engine: gin.New()}
+func New(client redis.Client) (*Handler, error) {
+	h := &Handler{engine: gin.New(), store: client}
 	if err := h.setHandlers(); err != nil {
 		return nil, errors.New("could not set handler")
 	}

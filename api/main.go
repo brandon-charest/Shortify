@@ -5,6 +5,7 @@ import (
 
 	"github.com/brandon-charest/Shortify.git/handlers"
 	"github.com/brandon-charest/Shortify.git/stores/redis"
+
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 )
@@ -30,11 +31,11 @@ func main() {
 
 func initApp() error {
 
-	_, err := redis.New()
+	store, err := redis.New()
 	if err != nil {
 		logrus.Fatalf("Could not setup redis: %v", err)
 	}
-	h, err := handlers.New()
+	h, err := handlers.New(*store)
 	if err != nil {
 		logrus.Fatalf("Could not setup app: %v", err)
 	}
