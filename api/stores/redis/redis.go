@@ -4,9 +4,12 @@ import (
 	"errors"
 	"time"
 
+	"github.com/asaskevich/govalidator"
+	"github.com/brandon-charest/Shortify.git/stores/shared"
 	"github.com/go-redis/redis"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
+	"github.com/teris-io/shortid"
 )
 
 type Client struct {
@@ -53,6 +56,25 @@ func newClient(hostaddr, password string, db int, maxRetries int, readTimeout st
 	}
 	ret := &Client{client: c}
 	return ret, nil
+}
+
+func (r *Client) CreateEntry(entry shared.Entry) (string, error) {
+	if !govalidator.IsURL(entry.URL) {
+		return "", shared.ErrInvalidURL
+	}
+	logrus.Debug("Creating entry")
+	key, err := shortid.Generate()
+	if err != nil {
+		logrus.Error("error generating id")
+		return "", err
+	}
+	err = r.client.SAdd(key, entry.URL).Err()
+	if err != nil {
+		logrus.Error("error writing to redis")
+		return "", err
+	}
+
+	return key, nil
 }
 
 func (r *Client) Close() error {
